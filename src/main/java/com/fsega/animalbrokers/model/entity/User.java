@@ -4,6 +4,7 @@ import com.fsega.animalbrokers.model.enums.Role;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -32,5 +33,8 @@ public class User extends AbstractEntity {
     private Role role;
 
     private byte[] avatar;
+
+    @OneToMany(mappedBy = "creator")
+    private List<Thread> threads;
 
 }

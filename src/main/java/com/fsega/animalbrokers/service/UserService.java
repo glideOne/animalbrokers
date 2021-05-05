@@ -13,6 +13,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @RequiredArgsConstructor
 @Service
 public class UserService {
@@ -28,6 +32,19 @@ public class UserService {
         User user = UserMapper.toEntity(userCreateDto);
         user.setPassword(passwordEncoder.encode(userCreateDto.getPassword()));
         return UserMapper.toDto(userRepo.save(user));
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserDto> getAllUsers() {
+        return userRepo.findAll().stream()
+                .map(UserMapper::toDto)
+                .collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public UserDto getUserById(UUID userId) {
+        return UserMapper.toDto(userRepo.findById(userId)
+                .orElse(null));
     }
 
     private void checkUsernameIsUnique(String username) {
