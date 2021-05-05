@@ -1,7 +1,7 @@
 package com.fsega.animalbrokers.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fsega.animalbrokers.model.entity.*;
+import com.fsega.animalbrokers.model.entity.Photo;
 import com.fsega.animalbrokers.model.enums.ThreadType;
 import lombok.*;
 
@@ -21,11 +21,12 @@ public class ThreadDto {
     private String title;
     private String description;
     private ThreadType type;
-    private AnimalClass animalClass;
-    private AnimalBreed animalBreed;
+    private String animalClassName;
+    private String animalBreedName;
     private List<Photo> photos;
-    private Location lastKnownLocation;
+    private LocationDto lastKnownLocation;
     private LocalDateTime lastSeenTime;
-    private List<Post> posts;
+    private List<PostDto> posts;
+    private UserDto creator;
 
 }

@@ -37,4 +37,7 @@ public class User extends AbstractEntity {
     @OneToMany(mappedBy = "creator")
     private List<Thread> threads;
 
+    @OneToMany(mappedBy = "poster")
+    private List<Post> posts;
+
 }

@@ -1,13 +1,12 @@
 package com.fsega.animalbrokers.model.dto;
 
-import com.fsega.animalbrokers.model.entity.AnimalBreed;
-import com.fsega.animalbrokers.model.entity.AnimalClass;
-import com.fsega.animalbrokers.model.entity.Location;
 import com.fsega.animalbrokers.model.entity.Photo;
 import com.fsega.animalbrokers.model.enums.ThreadType;
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -20,7 +19,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class ThreadCreateDto {
 
-    UUID creatorId;
+    private UUID creatorId;
 
     @NotBlank
     @Size(max = 160)
@@ -29,18 +28,16 @@ public class ThreadCreateDto {
     @NotBlank
     private String description;
 
-    @NotBlank
+    @NotNull
     private ThreadType type;
 
-    @NotBlank
-    private AnimalClass animalClass;
-
-    @NotBlank
-    private AnimalBreed animalBreed;
+    @NotNull
+    private UUID breedId;
 
     private List<Photo> photos;
 
-    private Location lastKnownLocation;
+    @Valid
+    private LocationDto lastKnownLocation;
 
     private LocalDateTime lastSeenTime;
 

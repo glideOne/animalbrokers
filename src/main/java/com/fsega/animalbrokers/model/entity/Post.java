@@ -20,6 +20,11 @@ public class Post extends AbstractEntity {
     @Column(nullable = false)
     private String text;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "poster_id", nullable = false)
+    private User poster;
+
+    @OneToMany
     private List<Photo> photos;
 
 }

@@ -2,6 +2,7 @@ package com.fsega.animalbrokers.model.entity;
 
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 
 @Entity
@@ -12,7 +13,10 @@ import javax.persistence.Entity;
 @AllArgsConstructor
 public class Location extends AbstractEntity {
 
-    Double latitude;
-    Double longitude;
+    @Column(nullable = false)
+    private Double latitude;
+
+    @Column(nullable = false)
+    private Double longitude;
 
 }

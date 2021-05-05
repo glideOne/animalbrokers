@@ -3,6 +3,7 @@ package com.fsega.animalbrokers.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Getter
@@ -12,12 +13,15 @@ import javax.persistence.*;
 @AllArgsConstructor
 public class AnimalBreed extends AbstractEntity {
 
+    //retriever, akita, other
+    @Column(nullable = false)
+    private String name;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "animal_class_id")
     private AnimalClass animalClass;
 
-    //retriever, akita, other
-    @Column(nullable = false)
-    private String name;
+    @OneToMany(mappedBy = "animalBreed")
+    private List<Thread> threads;
 
 }

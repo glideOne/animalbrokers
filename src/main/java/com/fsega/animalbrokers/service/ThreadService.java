@@ -2,9 +2,13 @@ package com.fsega.animalbrokers.service;
 
 import com.fsega.animalbrokers.model.dto.ThreadCreateDto;
 import com.fsega.animalbrokers.model.dto.ThreadDto;
+import com.fsega.animalbrokers.model.dto.ThreadSearchDto;
+import com.fsega.animalbrokers.model.entity.AnimalBreed;
 import com.fsega.animalbrokers.model.entity.Thread;
-import com.fsega.animalbrokers.model.enums.ThreadType;
+import com.fsega.animalbrokers.model.entity.User;
+import com.fsega.animalbrokers.repository.AnimalBreedRepository;
 import com.fsega.animalbrokers.repository.ThreadRepository;
+import com.fsega.animalbrokers.repository.UserRepository;
 import com.fsega.animalbrokers.utils.exception.ExceptionType;
 import com.fsega.animalbrokers.utils.exception.NotFoundException;
 import com.fsega.animalbrokers.utils.mapper.ThreadMapper;
@@ -21,34 +25,28 @@ import java.util.stream.Collectors;
 public class ThreadService {
 
     private final ThreadRepository threadRepo;
+    private final AnimalBreedRepository animalBreedRepo;
+    private final UserRepository userRepository;
 
     @Transactional
     public ThreadDto createThread(ThreadCreateDto threadCreateDto) {
-        Thread thread = ThreadMapper.toEntity(threadCreateDto);
-        return ThreadMapper.toDto(threadRepo.save(thread));
-    }
+        AnimalBreed breed = animalBreedRepo.getOne(threadCreateDto.getBreedId());
+        User creator = userRepository.getOne(threadCreateDto.getCreatorId());
+        Thread thread = ThreadMapper.toEntity(threadCreateDto, breed, creator);
 
-    @Transactional(readOnly = true)
-    public List<ThreadDto> getThreads(ThreadType type) {
-        if (type == null) {
-            return threadRepo.findAll().stream()
-                    .map(ThreadMapper::toDto)
-                    .collect(Collectors.toList());
-        }
-        return threadRepo.getAllByType(type).stream()
-                .map(ThreadMapper::toDto)
-                .collect(Collectors.toList());
+        return ThreadMapper.toDto(threadRepo.save(thread));
     }
 
     @Transactional(readOnly = true)
     public ThreadDto getThreadById(UUID threadId) {
         return ThreadMapper.toDto(threadRepo.findById(threadId)
-                .orElse(null));
+                .orElseThrow(() -> new NotFoundException("Thread not found", ExceptionType.NOT_FOUND)));
     }
 
     @Transactional(readOnly = true)
-    public List<ThreadDto> getThreadsByUserId(UUID userId) {
-        return threadRepo.getAllByCreator(userId).stream()
+    public List<ThreadDto> searchThreads(ThreadSearchDto threadSearchDto) {
+        return threadRepo.searchThreads(threadSearchDto.getType(), threadSearchDto.getCreatorId())
+                .stream()
                 .map(ThreadMapper::toDto)
                 .collect(Collectors.toList());
     }
