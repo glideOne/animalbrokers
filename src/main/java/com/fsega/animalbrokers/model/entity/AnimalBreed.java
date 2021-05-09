@@ -14,7 +14,7 @@ import java.util.List;
 public class AnimalBreed extends AbstractEntity {
 
     //retriever, akita, other
-    @Column(nullable = false)
+    @Column(nullable = false, length = 64)
     private String name;
 
     @ManyToOne(fetch = FetchType.EAGER)

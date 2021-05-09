@@ -20,7 +20,7 @@ public class AnimalClass extends AbstractEntity {
     private List<AnimalBreed> animalBreeds;
 
     //dog, cat, bird, etc.
-    @Column(nullable = false)
+    @Column(nullable = false, length = 64)
     private String name;
 
 }
