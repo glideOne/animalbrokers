@@ -20,6 +20,7 @@ public class UserDto {
     private String email;
     private String username;
     private Role role;
+    private boolean active;
     private byte[] avatar;
 
 }

@@ -32,6 +32,9 @@ public class User extends AbstractEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @Column(nullable = false)
+    private boolean active;
+
     private byte[] avatar;
 
     @OneToMany(mappedBy = "creator")

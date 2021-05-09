@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final UserRepository userRepo;
-    private PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Transactional
     public UserDto createUser(UserCreateDto userCreateDto) {

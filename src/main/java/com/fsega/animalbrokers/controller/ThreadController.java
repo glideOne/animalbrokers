@@ -1,8 +1,6 @@
 package com.fsega.animalbrokers.controller;
 
-import com.fsega.animalbrokers.model.dto.ThreadCreateDto;
-import com.fsega.animalbrokers.model.dto.ThreadDto;
-import com.fsega.animalbrokers.model.dto.ThreadSearchDto;
+import com.fsega.animalbrokers.model.dto.*;
 import com.fsega.animalbrokers.service.ThreadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +31,11 @@ public class ThreadController {
     @GetMapping
     public List<ThreadDto> searchThreads(@ModelAttribute ThreadSearchDto threadSearchDto) {
         return threadService.searchThreads(threadSearchDto);
+    }
+
+    @PutMapping("/{threadId}")
+    public ThreadDto updateThread(@PathVariable UUID threadId, @RequestBody @Valid ThreadCreateDto threadCreateDto) {
+        return threadService.updateThread(threadId, threadCreateDto);
     }
 
     @DeleteMapping("/{threadId}")

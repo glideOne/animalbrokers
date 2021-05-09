@@ -1,9 +1,8 @@
 package com.fsega.animalbrokers.service;
 
-import com.fsega.animalbrokers.model.dto.ThreadCreateDto;
-import com.fsega.animalbrokers.model.dto.ThreadDto;
-import com.fsega.animalbrokers.model.dto.ThreadSearchDto;
+import com.fsega.animalbrokers.model.dto.*;
 import com.fsega.animalbrokers.model.entity.AnimalBreed;
+import com.fsega.animalbrokers.model.entity.Post;
 import com.fsega.animalbrokers.model.entity.Thread;
 import com.fsega.animalbrokers.model.entity.User;
 import com.fsega.animalbrokers.repository.AnimalBreedRepository;
@@ -11,6 +10,8 @@ import com.fsega.animalbrokers.repository.ThreadRepository;
 import com.fsega.animalbrokers.repository.UserRepository;
 import com.fsega.animalbrokers.utils.exception.ExceptionType;
 import com.fsega.animalbrokers.utils.exception.NotFoundException;
+import com.fsega.animalbrokers.utils.mapper.LocationMapper;
+import com.fsega.animalbrokers.utils.mapper.PostMapper;
 import com.fsega.animalbrokers.utils.mapper.ThreadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,8 +33,8 @@ public class ThreadService {
     public ThreadDto createThread(ThreadCreateDto threadCreateDto) {
         AnimalBreed breed = animalBreedRepo.getOne(threadCreateDto.getBreedId());
         User creator = userRepository.getOne(threadCreateDto.getCreatorId());
-        Thread thread = ThreadMapper.toEntity(threadCreateDto, breed, creator);
 
+        Thread thread = ThreadMapper.toEntity(threadCreateDto, breed, creator);
         return ThreadMapper.toDto(threadRepo.save(thread));
     }
 
@@ -49,6 +50,23 @@ public class ThreadService {
                 .stream()
                 .map(ThreadMapper::toDto)
                 .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public ThreadDto updateThread(UUID threadId, ThreadCreateDto threadCreateDto) {
+        Thread threadToUpdate = threadRepo.findThreadById(threadId);
+        if (threadToUpdate == null) {
+            throw new NotFoundException(String.format("Thread with id: %s not found.", threadId),
+                    ExceptionType.NOT_FOUND);
+        }
+        threadToUpdate.setPhotos(threadCreateDto.getPhotos());
+        threadToUpdate.setAnimalBreed(animalBreedRepo.getOne(threadCreateDto.getBreedId()));
+        threadToUpdate.setDescription(threadCreateDto.getDescription());
+        threadToUpdate.setLastKnownLocation(LocationMapper.toEntity(threadCreateDto.getLastKnownLocation()));
+        threadToUpdate.setLastSeenTime(threadCreateDto.getLastSeenTime());
+        threadToUpdate.setTitle(threadCreateDto.getTitle());
+        threadToUpdate.setType(threadCreateDto.getType());
+        return ThreadMapper.toDto(threadRepo.save(threadToUpdate));
     }
 
     @Transactional

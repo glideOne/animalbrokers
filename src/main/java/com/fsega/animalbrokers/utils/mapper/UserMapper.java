@@ -18,7 +18,8 @@ public class UserMapper {
                 .lastName(userCreateDto.getLastName())
                 .email(userCreateDto.getEmail())
                 .username(userCreateDto.getUsername())
-                .role(Role.ACTIVE)
+//                .role(Role.ACTIVE)
+                .active(true)
                 .avatar(userCreateDto.getAvatar())
                 .build();
     }
@@ -34,6 +35,7 @@ public class UserMapper {
                 .email(user.getEmail())
                 .username(user.getUsername())
                 .role(user.getRole())
+                .active(user.isActive())
                 .avatar(user.getAvatar())
                 .build();
     }
