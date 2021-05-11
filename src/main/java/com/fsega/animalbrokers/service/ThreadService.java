@@ -1,8 +1,9 @@
 package com.fsega.animalbrokers.service;
 
-import com.fsega.animalbrokers.model.dto.*;
+import com.fsega.animalbrokers.model.dto.ThreadCreateDto;
+import com.fsega.animalbrokers.model.dto.ThreadDto;
+import com.fsega.animalbrokers.model.dto.ThreadSearchDto;
 import com.fsega.animalbrokers.model.entity.AnimalBreed;
-import com.fsega.animalbrokers.model.entity.Post;
 import com.fsega.animalbrokers.model.entity.Thread;
 import com.fsega.animalbrokers.model.entity.User;
 import com.fsega.animalbrokers.repository.AnimalBreedRepository;
@@ -11,7 +12,6 @@ import com.fsega.animalbrokers.repository.UserRepository;
 import com.fsega.animalbrokers.utils.exception.ExceptionType;
 import com.fsega.animalbrokers.utils.exception.NotFoundException;
 import com.fsega.animalbrokers.utils.mapper.LocationMapper;
-import com.fsega.animalbrokers.utils.mapper.PostMapper;
 import com.fsega.animalbrokers.utils.mapper.ThreadMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
