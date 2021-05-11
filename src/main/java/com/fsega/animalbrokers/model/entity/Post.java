@@ -24,7 +24,7 @@ public class Post extends AbstractEntity {
     @JoinColumn(name = "poster_id", nullable = false)
     private User poster;
 
-    @OneToMany
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
 }

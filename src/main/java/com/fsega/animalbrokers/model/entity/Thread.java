@@ -30,7 +30,7 @@ public class Thread extends AbstractEntity {
     @JoinColumn(name = "breed_id", nullable = false)
     private AnimalBreed animalBreed;
 
-    @OneToMany
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
     private LocalDateTime lastSeenTime;
