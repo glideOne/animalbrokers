@@ -31,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping
-    public List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsers(@RequestHeader(name = "Authorization") String token) {
         return userService.getAllUsers();
     }
 }

@@ -10,8 +10,6 @@ public class JwtResponseDto {
 
     private String token;
 
-    private String type = "Bearer";
-
     private UserDto userDto;
 
     public JwtResponseDto(String accessToken, UserDto userDto) {

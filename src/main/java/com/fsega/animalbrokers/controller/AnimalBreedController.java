@@ -20,7 +20,8 @@ public class AnimalBreedController {
     private final AnimalBreedService animalBreedService;
 
     @PostMapping
-    public AnimalBreedDto createAnimalBreed(@RequestBody @Valid AnimalBreedCreateDto animalBreedCreateDto) {
+    public AnimalBreedDto createAnimalBreed(@RequestBody @Valid AnimalBreedCreateDto animalBreedCreateDto,
+                                            @RequestHeader(name = "Authorization") String token) {
         return animalBreedService.createAnimalBreed(animalBreedCreateDto);
     }
 
