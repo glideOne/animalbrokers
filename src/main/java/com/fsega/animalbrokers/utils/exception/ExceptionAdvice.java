@@ -9,8 +9,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import java.util.List;
 
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.NOT_FOUND;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class ExceptionAdvice {
@@ -29,6 +28,16 @@ public class ExceptionAdvice {
     @ResponseStatus(code = NOT_FOUND)
     @ResponseBody
     public Error notFoundException(NotFoundException e) {
+        return Error.builder()
+                .exceptionType(e.getExceptionType())
+                .message(e.getMessage())
+                .build();
+    }
+
+    @ExceptionHandler(UnauthorizedException.class)
+    @ResponseStatus(code = UNAUTHORIZED)
+    @ResponseBody
+    public Error unauthorizedException(UnauthorizedException e) {
         return Error.builder()
                 .exceptionType(e.getExceptionType())
                 .message(e.getMessage())

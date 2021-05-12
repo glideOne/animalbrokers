@@ -12,3 +12,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+animalbrokers:
+  app:
+    jwtSecret: s3cr3tan1malbr0k3rs
+    jwtExpirationMs: 8640000
