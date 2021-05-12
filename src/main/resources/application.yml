@@ -1,5 +1,7 @@
 server:
-  port: 8080
+  port: 8090
+#  servlet:
+#    context-path: /api/v1
 
 spring:
   datasource:
@@ -10,3 +12,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+animalbrokers:
+  app:
+    jwtSecret: s3cr3tan1malbr0k3rs
+    jwtExpirationMs: 8640000
