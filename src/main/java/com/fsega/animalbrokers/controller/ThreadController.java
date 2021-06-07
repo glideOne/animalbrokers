@@ -1,6 +1,7 @@
 package com.fsega.animalbrokers.controller;
 
 import com.fsega.animalbrokers.model.dto.*;
+import com.fsega.animalbrokers.model.enums.ThreadType;
 import com.fsega.animalbrokers.service.ThreadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -41,6 +42,11 @@ public class ThreadController {
     @DeleteMapping("/{threadId}")
     public Boolean deleteThread(@PathVariable UUID threadId) {
         return threadService.deleteThread(threadId);
+    }
+
+    @GetMapping("/types")
+    public List<ThreadType> getThreadTypes(@RequestHeader(name = "Authorization") String token) {
+        return threadService.getThreadTypes();
     }
 
 }

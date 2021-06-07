@@ -6,6 +6,7 @@ import com.fsega.animalbrokers.model.dto.ThreadSearchDto;
 import com.fsega.animalbrokers.model.entity.AnimalBreed;
 import com.fsega.animalbrokers.model.entity.Thread;
 import com.fsega.animalbrokers.model.entity.User;
+import com.fsega.animalbrokers.model.enums.ThreadType;
 import com.fsega.animalbrokers.repository.AnimalBreedRepository;
 import com.fsega.animalbrokers.repository.ThreadRepository;
 import com.fsega.animalbrokers.repository.UserRepository;
@@ -81,4 +82,7 @@ public class ThreadService {
         return !threadRepo.existsById(threadId);
     }
 
+    public List<ThreadType> getThreadTypes() {
+        return List.of(ThreadType.values());
+    }
 }
