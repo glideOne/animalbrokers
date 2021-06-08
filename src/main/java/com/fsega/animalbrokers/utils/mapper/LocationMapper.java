@@ -9,7 +9,7 @@ public class LocationMapper {
 
     public static Location toEntity(LocationDto locationDto) {
         if (locationDto == null) {
-            throw new IllegalArgumentException("Location mapper received null dto as input.");
+            return null;
         }
         return Location.builder()
                 .latitude(locationDto.getLatitude())
