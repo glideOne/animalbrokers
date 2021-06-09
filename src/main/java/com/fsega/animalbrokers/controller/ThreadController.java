@@ -56,24 +56,4 @@ public class ThreadController {
         return threadService.getThreadTypes();
     }
 
-    @PostMapping("/photo")
-    public Boolean uploadPhoto(@RequestHeader(name = "Authorization") String token,
-                               @RequestBody byte[] file) {
-//        try {
-//            byte[] image = file.getBytes();
-            Photo photo = Photo.builder()
-                    .image(file)
-                    .build();
-
-            photoRepo.save(photo);
-
-
-
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-
-        return true;
-    }
-
 }
