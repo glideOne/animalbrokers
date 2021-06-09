@@ -23,7 +23,7 @@ public class ThreadDto {
     private ThreadType type;
     private String animalClassName;
     private String animalBreedName;
-    private List<Photo> photos;
+    private List<PhotoDto> photos;
     private LocationDto lastKnownLocation;
     private LocalDateTime lastSeenTime;
     private List<PostDto> posts;

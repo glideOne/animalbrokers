@@ -52,4 +52,11 @@ public class Thread extends AbstractEntity {
         }
         return posts;
     }
+
+    public List<Photo> getPhotos() {
+        if (photos == null) {
+            photos = new ArrayList<>();
+        }
+        return photos;
+    }
 }

@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toEntities;
+
 @RequiredArgsConstructor
 @Service
 public class ThreadService {
@@ -36,6 +38,7 @@ public class ThreadService {
         User creator = userRepository.getOne(threadCreateDto.getCreatorId());
 
         Thread thread = ThreadMapper.toEntity(threadCreateDto, breed, creator);
+        thread.getPhotos().forEach(photo -> photo.setThread(thread));
         return ThreadMapper.toDto(threadRepo.save(thread));
     }
 
@@ -60,7 +63,7 @@ public class ThreadService {
             throw new NotFoundException(String.format("Thread with id: %s not found.", threadId),
                     ExceptionType.NOT_FOUND);
         }
-        threadToUpdate.setPhotos(threadCreateDto.getPhotos());
+        threadToUpdate.setPhotos(toEntities(threadCreateDto.getPhotos()));
         threadToUpdate.setAnimalBreed(animalBreedRepo.getOne(threadCreateDto.getBreedId()));
         threadToUpdate.setDescription(threadCreateDto.getDescription());
         threadToUpdate.setLastKnownLocation(LocationMapper.toEntity(threadCreateDto.getLastKnownLocation()));

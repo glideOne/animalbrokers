@@ -11,6 +11,9 @@ import lombok.experimental.UtilityClass;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toDtos;
+import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toEntities;
+
 @UtilityClass
 public class ThreadMapper {
 
@@ -22,7 +25,7 @@ public class ThreadMapper {
                 .title(threadCreateDto.getTitle())
                 .description(threadCreateDto.getDescription())
                 .type(threadCreateDto.getType())
-                .photos(threadCreateDto.getPhotos())
+                .photos(toEntities(threadCreateDto.getPhotos()))
                 .lastKnownLocation(LocationMapper.toEntity(threadCreateDto.getLastKnownLocation()))
                 .lastSeenTime(threadCreateDto.getLastSeenTime())
                 .animalBreed(animalBreed)
@@ -37,7 +40,7 @@ public class ThreadMapper {
         List<PostDto> allPosts = Arrays.asList(PostDto.builder()
                 .text(thread.getDescription())
                 .poster(UserMapper.toDto(thread.getCreator()))
-                .photos(thread.getPhotos())
+                .photos(toDtos(thread.getPhotos()))
                 .build());
         thread.getPosts().stream().map(PostMapper::toDto).forEach(allPosts::add);
 
@@ -48,7 +51,7 @@ public class ThreadMapper {
                 .type(thread.getType())
                 .animalClassName(thread.getAnimalBreed().getAnimalClass().getName())
                 .animalBreedName(thread.getAnimalBreed().getName())
-                .photos(thread.getPhotos())
+                .photos(toDtos(thread.getPhotos()))
                 .lastKnownLocation(LocationMapper.toDto(thread.getLastKnownLocation()))
                 .lastSeenTime(thread.getLastSeenTime())
                 .creator(UserMapper.toDto(thread.getCreator()))

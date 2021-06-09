@@ -15,7 +15,7 @@ import java.util.List;
 public class PostDto {
 
     private String text;
-    private List<Photo> photos;
+    private List<PhotoDto> photos;
     private UserDto poster;
 
 }

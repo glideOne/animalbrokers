@@ -18,6 +18,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toEntities;
+
 @RequiredArgsConstructor
 @Service
 public class PostService {
@@ -50,7 +52,7 @@ public class PostService {
             throw new NotFoundException(String.format("Post with id: %s not found.", postId),
                     ExceptionType.NOT_FOUND);
         }
-        postToUpdate.setPhotos(postCreateDto.getPhotos());
+        postToUpdate.setPhotos(toEntities(postCreateDto.getPhotos()));
         postToUpdate.setText(postCreateDto.getText());
         return PostMapper.toDto(postRepo.save(postToUpdate));
     }

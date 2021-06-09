@@ -7,6 +7,9 @@ import com.fsega.animalbrokers.model.entity.Thread;
 import com.fsega.animalbrokers.model.entity.User;
 import lombok.experimental.UtilityClass;
 
+import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toDtos;
+import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toEntities;
+
 @UtilityClass
 public class PostMapper {
 
@@ -18,7 +21,7 @@ public class PostMapper {
                 .thread(thread)
                 .text(postCreateDto.getText())
                 .poster(poster)
-                .photos(postCreateDto.getPhotos())
+                .photos(toEntities(postCreateDto.getPhotos()))
                 .build();
     }
 
@@ -28,7 +31,7 @@ public class PostMapper {
         }
         return PostDto.builder()
                 .text(post.getText())
-                .photos(post.getPhotos())
+                .photos(toDtos(post.getPhotos()))
                 .poster(UserMapper.toDto(post.getPoster()))
                 .build();
     }
