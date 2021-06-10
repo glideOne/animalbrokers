@@ -3,6 +3,7 @@ package com.fsega.animalbrokers.model.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -24,11 +25,18 @@ public class Post extends AbstractEntity {
     @JoinColumn(name = "poster_id", nullable = false)
     private User poster;
 
-    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "location_id")
     private Location spottedAt;
+
+    public List<Photo> getPhotos() {
+        if (photos == null) {
+            photos = new ArrayList<>();
+        }
+        return photos;
+    }
 
 }
