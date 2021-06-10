@@ -22,6 +22,7 @@ public class PostMapper {
                 .text(postCreateDto.getText())
                 .poster(poster)
                 .photos(toEntities(postCreateDto.getPhotos()))
+                .spottedAt(LocationMapper.toEntity(postCreateDto.getSpottedAt()))
                 .build();
     }
 
@@ -32,6 +33,7 @@ public class PostMapper {
         return PostDto.builder()
                 .text(post.getText())
                 .photos(toDtos(post.getPhotos()))
+                .spottedAt(LocationMapper.toDto(post.getSpottedAt()))
                 .poster(UserMapper.toDto(post.getPoster()))
                 .build();
     }

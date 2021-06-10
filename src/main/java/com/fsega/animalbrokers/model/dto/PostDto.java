@@ -16,6 +16,7 @@ public class PostDto {
 
     private String text;
     private List<PhotoDto> photos;
+    private LocationDto spottedAt;
     private UserDto poster;
 
 }

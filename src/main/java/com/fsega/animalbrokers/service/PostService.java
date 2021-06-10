@@ -34,7 +34,9 @@ public class PostService {
         User poster = userRepo.getOne(postCreateDto.getPosterId());
 
         Post post = PostMapper.toEntity(postCreateDto, thread, poster);
+        post.getPhotos().forEach(photo -> photo.setPost(post));
         return PostMapper.toDto(postRepo.save(post));
+
     }
 
     @Transactional(readOnly = true)

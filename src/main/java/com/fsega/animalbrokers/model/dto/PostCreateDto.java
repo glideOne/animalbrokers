@@ -2,6 +2,7 @@ package com.fsega.animalbrokers.model.dto;
 
 import lombok.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -23,5 +24,8 @@ public class PostCreateDto {
     private String text;
 
     private List<PhotoDto> photos;
+
+    @Valid
+    private LocationDto spottedAt;
 
 }

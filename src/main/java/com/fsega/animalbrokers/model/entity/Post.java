@@ -27,4 +27,8 @@ public class Post extends AbstractEntity {
     @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
     private List<Photo> photos;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "location_id")
+    private Location spottedAt;
+
 }
