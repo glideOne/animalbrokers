@@ -1,8 +1,10 @@
 package com.fsega.animalbrokers.controller;
 
 import com.fsega.animalbrokers.model.dto.*;
+import com.fsega.animalbrokers.model.enums.ThreadType;
 import com.fsega.animalbrokers.service.ThreadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -19,7 +21,8 @@ public class ThreadController {
     private final ThreadService threadService;
 
     @PostMapping
-    public ThreadDto createThread(@RequestBody @Valid ThreadCreateDto threadCreateDto) {
+    public ThreadDto createThread(@RequestHeader(name = "Authorization") String token,
+                                  @RequestBody @Valid ThreadCreateDto threadCreateDto) {
         return threadService.createThread(threadCreateDto);
     }
 
@@ -27,6 +30,7 @@ public class ThreadController {
     public ThreadDto getThread(@PathVariable UUID threadId) {
         return threadService.getThreadById(threadId);
     }
+
 
     @GetMapping
     public List<ThreadDto> searchThreads(@ModelAttribute ThreadSearchDto threadSearchDto) {
@@ -39,8 +43,15 @@ public class ThreadController {
     }
 
     @DeleteMapping("/{threadId}")
-    public Boolean deleteThread(@PathVariable UUID threadId) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @threadService.isLoggedInUserCreatorOfThread(#threadId)")
+    public Boolean deleteThread(@RequestHeader(name = "Authorization") String token,
+                                @PathVariable UUID threadId) {
         return threadService.deleteThread(threadId);
+    }
+
+    @GetMapping("/types")
+    public List<ThreadType> getThreadTypes(@RequestHeader(name = "Authorization") String token) {
+        return threadService.getThreadTypes();
     }
 
 }

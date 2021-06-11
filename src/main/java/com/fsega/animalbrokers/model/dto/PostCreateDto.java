@@ -1,9 +1,8 @@
 package com.fsega.animalbrokers.model.dto;
 
-import com.fsega.animalbrokers.model.entity.Photo;
 import lombok.*;
 
-import javax.persistence.OneToMany;
+import javax.validation.Valid;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.List;
@@ -24,7 +23,9 @@ public class PostCreateDto {
     @NotBlank
     private String text;
 
-    @OneToMany
-    private List<Photo> photos;
+    private List<PhotoDto> photos;
+
+    @Valid
+    private LocationDto spottedAt;
 
 }

@@ -2,10 +2,7 @@ package com.fsega.animalbrokers.model.entity;
 
 import lombok.*;
 
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 
 @Entity
 @Getter
@@ -24,5 +21,8 @@ public class Photo extends AbstractEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "post_id")
     private Post post;
+
+    @Lob
+    private byte[] image;
 
 }

@@ -7,16 +7,21 @@ import com.fsega.animalbrokers.model.entity.User;
 import com.fsega.animalbrokers.repository.PostRepository;
 import com.fsega.animalbrokers.repository.ThreadRepository;
 import com.fsega.animalbrokers.repository.UserRepository;
+import com.fsega.animalbrokers.security.services.UserDetailsImpl;
 import com.fsega.animalbrokers.utils.exception.ExceptionType;
 import com.fsega.animalbrokers.utils.exception.NotFoundException;
 import com.fsega.animalbrokers.utils.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toEntities;
 
 @RequiredArgsConstructor
 @Service
@@ -32,7 +37,9 @@ public class PostService {
         User poster = userRepo.getOne(postCreateDto.getPosterId());
 
         Post post = PostMapper.toEntity(postCreateDto, thread, poster);
+        post.getPhotos().forEach(photo -> photo.setPost(post));
         return PostMapper.toDto(postRepo.save(post));
+
     }
 
     @Transactional(readOnly = true)
@@ -50,7 +57,7 @@ public class PostService {
             throw new NotFoundException(String.format("Post with id: %s not found.", postId),
                     ExceptionType.NOT_FOUND);
         }
-        postToUpdate.setPhotos(postCreateDto.getPhotos());
+        postToUpdate.setPhotos(toEntities(postCreateDto.getPhotos()));
         postToUpdate.setText(postCreateDto.getText());
         return PostMapper.toDto(postRepo.save(postToUpdate));
     }
@@ -65,5 +72,14 @@ public class PostService {
 
         postRepo.delete(postToDelete);
         return !postRepo.existsById(postId);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean isLoggedInUserCreatorOfPost(UUID postId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        UUID loggedInUserId = userDetails.getId();
+
+        return postRepo.existsByIdAndPosterId(postId, loggedInUserId);
     }
 }

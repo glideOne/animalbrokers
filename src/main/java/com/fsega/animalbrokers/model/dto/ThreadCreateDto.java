@@ -1,6 +1,5 @@
 package com.fsega.animalbrokers.model.dto;
 
-import com.fsega.animalbrokers.model.entity.Photo;
 import com.fsega.animalbrokers.model.enums.ThreadType;
 import lombok.*;
 
@@ -34,7 +33,7 @@ public class ThreadCreateDto {
     @NotNull
     private UUID breedId;
 
-    private List<Photo> photos;
+    private List<PhotoDto> photos;
 
     @Valid
     private LocationDto lastKnownLocation;

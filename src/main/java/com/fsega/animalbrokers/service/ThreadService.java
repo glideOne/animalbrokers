@@ -6,20 +6,26 @@ import com.fsega.animalbrokers.model.dto.ThreadSearchDto;
 import com.fsega.animalbrokers.model.entity.AnimalBreed;
 import com.fsega.animalbrokers.model.entity.Thread;
 import com.fsega.animalbrokers.model.entity.User;
+import com.fsega.animalbrokers.model.enums.ThreadType;
 import com.fsega.animalbrokers.repository.AnimalBreedRepository;
 import com.fsega.animalbrokers.repository.ThreadRepository;
 import com.fsega.animalbrokers.repository.UserRepository;
+import com.fsega.animalbrokers.security.services.UserDetailsImpl;
 import com.fsega.animalbrokers.utils.exception.ExceptionType;
 import com.fsega.animalbrokers.utils.exception.NotFoundException;
 import com.fsega.animalbrokers.utils.mapper.LocationMapper;
 import com.fsega.animalbrokers.utils.mapper.ThreadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toEntities;
 
 @RequiredArgsConstructor
 @Service
@@ -35,6 +41,7 @@ public class ThreadService {
         User creator = userRepository.getOne(threadCreateDto.getCreatorId());
 
         Thread thread = ThreadMapper.toEntity(threadCreateDto, breed, creator);
+        thread.getPhotos().forEach(photo -> photo.setThread(thread));
         return ThreadMapper.toDto(threadRepo.save(thread));
     }
 
@@ -59,7 +66,7 @@ public class ThreadService {
             throw new NotFoundException(String.format("Thread with id: %s not found.", threadId),
                     ExceptionType.NOT_FOUND);
         }
-        threadToUpdate.setPhotos(threadCreateDto.getPhotos());
+        threadToUpdate.setPhotos(toEntities(threadCreateDto.getPhotos()));
         threadToUpdate.setAnimalBreed(animalBreedRepo.getOne(threadCreateDto.getBreedId()));
         threadToUpdate.setDescription(threadCreateDto.getDescription());
         threadToUpdate.setLastKnownLocation(LocationMapper.toEntity(threadCreateDto.getLastKnownLocation()));
@@ -81,4 +88,16 @@ public class ThreadService {
         return !threadRepo.existsById(threadId);
     }
 
+    public List<ThreadType> getThreadTypes() {
+        return List.of(ThreadType.values());
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean isLoggedInUserCreatorOfThread(UUID threadId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        UUID loggedInUserId = userDetails.getId();
+
+        return threadRepo.existsByIdAndCreatorId(threadId, loggedInUserId);
+    }
 }

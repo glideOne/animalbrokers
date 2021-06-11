@@ -18,4 +18,6 @@ public interface ThreadRepository extends JpaRepository<Thread, UUID> {
     List<Thread> searchThreads(@Param("threadType") ThreadType threadType,
                                @Param("creatorId") UUID creatorId);
 
+    Boolean existsByIdAndCreatorId(UUID threadId, UUID creatorId);
+
 }

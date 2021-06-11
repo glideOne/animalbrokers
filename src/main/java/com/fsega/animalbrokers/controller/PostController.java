@@ -5,6 +5,7 @@ import com.fsega.animalbrokers.model.dto.PostDto;
 import com.fsega.animalbrokers.model.dto.PostSearchDto;
 import com.fsega.animalbrokers.service.PostService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -37,6 +38,7 @@ public class PostController {
     }
 
     @DeleteMapping("/{postId}")
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @postService.isLoggedInUserCreatorOfPost(#postId)")
     public Boolean deletePost(@PathVariable UUID postId) {
         return postService.deletePost(postId);
     }

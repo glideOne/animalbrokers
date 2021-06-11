@@ -17,4 +17,6 @@ public interface PostRepository extends JpaRepository<Post, UUID> {
     List<Post> searchPosts(@Param("posterId") UUID posterId,
                            @Param("threadId") UUID threadId);
 
+    Boolean existsByIdAndPosterId(UUID postId, UUID creatorId);
+
 }

@@ -60,6 +60,34 @@ public class UserService {
         return UserMapper.toDto(user);
     }
 
+    @Transactional
+    public Boolean activateUser(UUID userId) {
+        User userToActivate = userRepo.findById(userId)
+                .orElse(null);
+        if (userToActivate == null) {
+            throw new NotFoundException(String.format("User with id: %s not found.", userId),
+                    ExceptionType.NOT_FOUND);
+        }
+
+        userToActivate.setActive(true);
+        userRepo.save(userToActivate);
+        return true;
+    }
+
+    @Transactional
+    public Boolean deactivateUser(UUID userId) {
+        User userToDeactivate = userRepo.findById(userId)
+                .orElse(null);
+        if (userToDeactivate == null) {
+            throw new NotFoundException(String.format("User with id: %s not found.", userId),
+                    ExceptionType.NOT_FOUND);
+        }
+
+        userToDeactivate.setActive(false);
+        userRepo.save(userToDeactivate);
+        return true;
+    }
+
     private void checkUsernameIsUnique(String username) {
         if (userRepo.existsByUsername(username)) {
             throw new BadRequestException(String.format("User with username: %s already exists.", username),

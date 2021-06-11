@@ -22,7 +22,9 @@ import static com.fsega.animalbrokers.utils.Constants.API_VERSION;
 
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableGlobalMethodSecurity(prePostEnabled = true,
+                            securedEnabled = true,
+                            jsr250Enabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
