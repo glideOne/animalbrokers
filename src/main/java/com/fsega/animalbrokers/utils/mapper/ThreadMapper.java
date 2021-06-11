@@ -4,11 +4,13 @@ import com.fsega.animalbrokers.model.dto.PostDto;
 import com.fsega.animalbrokers.model.dto.ThreadCreateDto;
 import com.fsega.animalbrokers.model.dto.ThreadDto;
 import com.fsega.animalbrokers.model.entity.AnimalBreed;
+import com.fsega.animalbrokers.model.entity.Post;
 import com.fsega.animalbrokers.model.entity.Thread;
 import com.fsega.animalbrokers.model.entity.User;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -50,6 +52,7 @@ public class ThreadMapper {
                 .lastSeenTime(thread.getLastSeenTime())
                 .creator(UserMapper.toDto(thread.getCreator()))
                 .posts(thread.getPosts().stream()
+                        .sorted(Comparator.comparing(Post::getCreated))
                         .map(PostMapper::toDto)
                         .collect(Collectors.toList()))
                 .build();

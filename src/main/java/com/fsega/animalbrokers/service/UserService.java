@@ -37,7 +37,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
-        return userRepo.findAll().stream()
+        return userRepo.findAllByOrderByFirstNameAscLastNameAsc().stream()
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());
     }

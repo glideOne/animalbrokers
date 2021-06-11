@@ -31,7 +31,6 @@ public class PostService {
     private final ThreadRepository threadRepo;
     private final UserRepository userRepo;
 
-    @Transactional
     public PostDto createPost(PostCreateDto postCreateDto) {
         Thread thread = threadRepo.getOne(postCreateDto.getThreadId());
         User poster = userRepo.getOne(postCreateDto.getPosterId());
@@ -39,7 +38,6 @@ public class PostService {
         Post post = PostMapper.toEntity(postCreateDto, thread, poster);
         post.getPhotos().forEach(photo -> photo.setPost(post));
         return PostMapper.toDto(postRepo.save(post));
-
     }
 
     @Transactional(readOnly = true)

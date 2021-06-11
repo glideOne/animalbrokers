@@ -14,7 +14,7 @@ public interface ThreadRepository extends JpaRepository<Thread, UUID> {
     Thread findThreadById(UUID id);
 
     @Query("SELECT t FROM Thread t WHERE (CAST (:creatorId as text) is null OR t.creator.id = :creatorId) " +
-            "AND (CAST (:threadType as text) is null OR t.type = :threadType)")
+            "AND (CAST (:threadType as text) is null OR t.type = :threadType) ORDER BY t.created DESC")
     List<Thread> searchThreads(@Param("threadType") ThreadType threadType,
                                @Param("creatorId") UUID creatorId);
 
