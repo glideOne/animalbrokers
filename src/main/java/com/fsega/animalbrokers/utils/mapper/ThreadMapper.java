@@ -58,4 +58,22 @@ public class ThreadMapper {
                 .build();
     }
 
+    public static ThreadDto toMiniDto(Thread thread) {
+        if (thread == null) {
+            return null;
+        }
+        return ThreadDto.builder()
+                .id(thread.getId())
+                .title(thread.getTitle())
+                .description(thread.getDescription())
+                .type(thread.getType())
+                .animalClassName(thread.getAnimalBreed().getAnimalClass().getName())
+                .animalBreedName(thread.getAnimalBreed().getName())
+                .lastKnownLocation(LocationMapper.toDto(thread.getLastKnownLocation()))
+                .lastSeenTime(thread.getLastSeenTime())
+                .creator(UserMapper.toDto(thread.getCreator()))
+                .build();
+
+    }
+
 }

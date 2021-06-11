@@ -55,7 +55,7 @@ public class ThreadService {
     public List<ThreadDto> searchThreads(ThreadSearchDto threadSearchDto) {
         return threadRepo.searchThreads(threadSearchDto.getType(), threadSearchDto.getCreatorId())
                 .stream()
-                .map(ThreadMapper::toDto)
+                .map(ThreadMapper::toMiniDto)
                 .collect(Collectors.toList());
     }
 
