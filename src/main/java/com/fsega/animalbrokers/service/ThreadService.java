@@ -10,11 +10,14 @@ import com.fsega.animalbrokers.model.enums.ThreadType;
 import com.fsega.animalbrokers.repository.AnimalBreedRepository;
 import com.fsega.animalbrokers.repository.ThreadRepository;
 import com.fsega.animalbrokers.repository.UserRepository;
+import com.fsega.animalbrokers.security.services.UserDetailsImpl;
 import com.fsega.animalbrokers.utils.exception.ExceptionType;
 import com.fsega.animalbrokers.utils.exception.NotFoundException;
 import com.fsega.animalbrokers.utils.mapper.LocationMapper;
 import com.fsega.animalbrokers.utils.mapper.ThreadMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -87,5 +90,14 @@ public class ThreadService {
 
     public List<ThreadType> getThreadTypes() {
         return List.of(ThreadType.values());
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean isLoggedInUserCreatorOfThread(UUID threadId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        UUID loggedInUserId = userDetails.getId();
+
+        return threadRepo.existsByIdAndCreatorId(threadId, loggedInUserId);
     }
 }

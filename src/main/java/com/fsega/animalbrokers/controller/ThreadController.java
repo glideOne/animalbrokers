@@ -1,16 +1,13 @@
 package com.fsega.animalbrokers.controller;
 
 import com.fsega.animalbrokers.model.dto.*;
-import com.fsega.animalbrokers.model.entity.Photo;
 import com.fsega.animalbrokers.model.enums.ThreadType;
-import com.fsega.animalbrokers.repository.PhotoRepository;
 import com.fsega.animalbrokers.service.ThreadService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
-import java.io.IOException;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,7 +19,6 @@ import static com.fsega.animalbrokers.utils.Constants.API_VERSION;
 public class ThreadController {
 
     private final ThreadService threadService;
-    private final PhotoRepository photoRepo;
 
     @PostMapping
     public ThreadDto createThread(@RequestHeader(name = "Authorization") String token,
@@ -47,7 +43,9 @@ public class ThreadController {
     }
 
     @DeleteMapping("/{threadId}")
-    public Boolean deleteThread(@PathVariable UUID threadId) {
+    @PreAuthorize("hasRole('ROLE_ADMIN') or @threadService.isLoggedInUserCreatorOfThread(#threadId)")
+    public Boolean deleteThread(@RequestHeader(name = "Authorization") String token,
+                                @PathVariable UUID threadId) {
         return threadService.deleteThread(threadId);
     }
 

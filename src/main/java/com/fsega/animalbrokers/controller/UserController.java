@@ -4,6 +4,7 @@ import com.fsega.animalbrokers.model.dto.UserCreateDto;
 import com.fsega.animalbrokers.model.dto.UserDto;
 import com.fsega.animalbrokers.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -33,5 +34,17 @@ public class UserController {
     @GetMapping
     public List<UserDto> getAllUsers(@RequestHeader(name = "Authorization") String token) {
         return userService.getAllUsers();
+    }
+
+    @PutMapping("/activate/{userId}")
+    @Secured("ROLE_ADMIN")
+    public Boolean activateUser(@PathVariable UUID userId) {
+        return userService.activateUser(userId);
+    }
+
+    @PutMapping("/deactivate/{userId}")
+    @Secured("ROLE_ADMIN")
+    public Boolean deactivateUser(@PathVariable UUID userId) {
+        return userService.deactivateUser(userId);
     }
 }

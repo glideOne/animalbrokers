@@ -7,10 +7,13 @@ import com.fsega.animalbrokers.model.entity.User;
 import com.fsega.animalbrokers.repository.PostRepository;
 import com.fsega.animalbrokers.repository.ThreadRepository;
 import com.fsega.animalbrokers.repository.UserRepository;
+import com.fsega.animalbrokers.security.services.UserDetailsImpl;
 import com.fsega.animalbrokers.utils.exception.ExceptionType;
 import com.fsega.animalbrokers.utils.exception.NotFoundException;
 import com.fsega.animalbrokers.utils.mapper.PostMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,5 +72,14 @@ public class PostService {
 
         postRepo.delete(postToDelete);
         return !postRepo.existsById(postId);
+    }
+
+    @Transactional(readOnly = true)
+    public Boolean isLoggedInUserCreatorOfPost(UUID postId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        UUID loggedInUserId = userDetails.getId();
+
+        return postRepo.existsByIdAndPosterId(postId, loggedInUserId);
     }
 }
