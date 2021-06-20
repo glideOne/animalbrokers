@@ -15,4 +15,5 @@ public class ThreadSearchDto {
     private UUID creatorId;
     private ThreadType type;
 
+
 }
