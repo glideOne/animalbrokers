@@ -45,7 +45,9 @@ public class ThreadMapper {
                 .title(thread.getTitle())
                 .description(thread.getDescription())
                 .type(thread.getType())
+                .animalClassId(thread.getAnimalBreed().getAnimalClass().getId())
                 .animalClassName(thread.getAnimalBreed().getAnimalClass().getName())
+                .animalBreedId(thread.getAnimalBreed().getId())
                 .animalBreedName(thread.getAnimalBreed().getName())
                 .photos(toDtos(thread.getPhotos()))
                 .lastKnownLocation(LocationMapper.toDto(thread.getLastKnownLocation()))
@@ -67,11 +69,14 @@ public class ThreadMapper {
                 .title(thread.getTitle())
                 .description(thread.getDescription())
                 .type(thread.getType())
+                .animalClassId(thread.getAnimalBreed().getAnimalClass().getId())
                 .animalClassName(thread.getAnimalBreed().getAnimalClass().getName())
+                .animalBreedId(thread.getAnimalBreed().getId())
                 .animalBreedName(thread.getAnimalBreed().getName())
                 .lastKnownLocation(LocationMapper.toDto(thread.getLastKnownLocation()))
                 .lastSeenTime(thread.getLastSeenTime())
                 .creator(UserMapper.toDto(thread.getCreator()))
+                .photos(toDtos(thread.getPhotos()))
                 .build();
 
     }

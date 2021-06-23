@@ -47,7 +47,7 @@ public class AnimalBreedService {
 
     @Transactional(readOnly = true)
     public List<AnimalBreedDto> getAnimalBreedByClassId(UUID animalClassId) {
-        return animalBreedRepo.findByAnimalClassId(animalClassId).stream()
+        return animalBreedRepo.findByAnimalClassIdOrderByName(animalClassId).stream()
                 .map(AnimalBreedMapper::toDto)
                 .collect(Collectors.toList());
     }

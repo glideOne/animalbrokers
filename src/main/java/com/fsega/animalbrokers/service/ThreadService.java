@@ -16,7 +16,6 @@ import com.fsega.animalbrokers.utils.exception.NotFoundException;
 import com.fsega.animalbrokers.utils.mapper.LocationMapper;
 import com.fsega.animalbrokers.utils.mapper.ThreadMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -55,7 +54,11 @@ public class ThreadService {
 
     @Transactional(readOnly = true)
     public List<ThreadDto> searchThreads(ThreadSearchDto dto) {
-        return threadRepo.searchThreads(dto.getType(), dto.getCreatorId())
+        String text = ofNullable(dto.getText())
+                .filter(s -> !s.isBlank())
+                .map(t -> "%" + t + "%")
+                .orElse(null);
+        return threadRepo.searchThreads(dto.getType(), dto.getCreatorId(), text, dto.getAnimalClassId(), dto.getAnimalBreedId())
                 .stream()
                 .map(ThreadMapper::toMiniDto)
                 .collect(Collectors.toList());
@@ -68,13 +71,22 @@ public class ThreadService {
             throw new NotFoundException(String.format("Thread with id: %s not found.", threadId),
                     ExceptionType.NOT_FOUND);
         }
-        threadToUpdate.setPhotos(toEntities(threadCreateDto.getPhotos()));
-        threadToUpdate.setAnimalBreed(animalBreedRepo.getOne(threadCreateDto.getBreedId()));
-        threadToUpdate.setDescription(threadCreateDto.getDescription());
-        threadToUpdate.setLastKnownLocation(LocationMapper.toEntity(threadCreateDto.getLastKnownLocation()));
-        threadToUpdate.setLastSeenTime(threadCreateDto.getLastSeenTime());
         threadToUpdate.setTitle(threadCreateDto.getTitle());
+        threadToUpdate.setDescription(threadCreateDto.getDescription());
         threadToUpdate.setType(threadCreateDto.getType());
+        threadToUpdate.setAnimalBreed(animalBreedRepo.getOne(threadCreateDto.getBreedId()));
+        threadToUpdate.setLastSeenTime(threadCreateDto.getLastSeenTime());
+
+        if (threadCreateDto.getPhotos() != null && !threadCreateDto.getPhotos().isEmpty()) {
+            // disconnect old photos from thread
+            threadToUpdate.getPhotos().forEach(p -> p.setThread(null));
+            // set and connect new photos
+            threadToUpdate.setPhotos(toEntities(threadCreateDto.getPhotos()));
+            threadToUpdate.getPhotos().forEach(photo -> photo.setThread(threadToUpdate));
+        }
+        if (threadCreateDto.getLastKnownLocation() != null) {
+            threadToUpdate.setLastKnownLocation(LocationMapper.toEntity(threadCreateDto.getLastKnownLocation()));
+        }
         return ThreadMapper.toDto(threadRepo.save(threadToUpdate));
     }
 

@@ -13,7 +13,9 @@ import java.util.UUID;
 public class ThreadSearchDto {
 
     private UUID creatorId;
+    private UUID animalClassId;
+    private UUID animalBreedId;
     private ThreadType type;
-
+    private String text;
 
 }

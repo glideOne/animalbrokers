@@ -37,7 +37,7 @@ public class AnimalClassService {
 
     @Transactional(readOnly = true)
     public List<AnimalClassDto> getAllAnimalClasses() {
-        return animalClassRepo.findAll().stream()
+        return animalClassRepo.findAllByOrderByName().stream()
                 .map(AnimalClassMapper::toDto)
                 .collect(Collectors.toList());
     }

@@ -10,7 +10,7 @@ import java.util.UUID;
 
 public interface AnimalBreedRepository extends JpaRepository<AnimalBreed, UUID> {
 
-    List<AnimalBreed> findByAnimalClassId(UUID animalClassId);
+    List<AnimalBreed> findByAnimalClassIdOrderByName(UUID animalClassId);
 
     Optional<AnimalBreed> findByNameAndAnimalClassId(String name, UUID animalClassId);
 

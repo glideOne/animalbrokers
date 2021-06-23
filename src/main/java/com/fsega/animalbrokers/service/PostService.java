@@ -55,7 +55,9 @@ public class PostService {
             throw new NotFoundException(String.format("Post with id: %s not found.", postId),
                     ExceptionType.NOT_FOUND);
         }
-        postToUpdate.setPhotos(toEntities(postCreateDto.getPhotos()));
+        if (postCreateDto.getPhotos() != null && !postCreateDto.getPhotos().isEmpty()) {
+            postToUpdate.setPhotos(toEntities(postCreateDto.getPhotos()));
+        }
         postToUpdate.setText(postCreateDto.getText());
         return PostMapper.toDto(postRepo.save(postToUpdate));
     }

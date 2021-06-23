@@ -21,7 +21,9 @@ public class ThreadDto {
     private String title;
     private String description;
     private ThreadType type;
+    private UUID animalClassId;
     private String animalClassName;
+    private UUID animalBreedId;
     private String animalBreedName;
     private List<PhotoDto> photos;
     private LocationDto lastKnownLocation;
