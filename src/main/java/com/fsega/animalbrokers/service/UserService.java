@@ -4,11 +4,14 @@ import com.fsega.animalbrokers.model.dto.UserCreateDto;
 import com.fsega.animalbrokers.model.dto.UserDto;
 import com.fsega.animalbrokers.model.entity.User;
 import com.fsega.animalbrokers.repository.UserRepository;
+import com.fsega.animalbrokers.security.services.UserDetailsImpl;
 import com.fsega.animalbrokers.utils.exception.BadRequestException;
 import com.fsega.animalbrokers.utils.exception.ExceptionType;
 import com.fsega.animalbrokers.utils.exception.NotFoundException;
 import com.fsega.animalbrokers.utils.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -37,7 +40,7 @@ public class UserService {
 
     @Transactional(readOnly = true)
     public List<UserDto> getAllUsers() {
-        return userRepo.findAll().stream()
+        return userRepo.findAllByOrderByFirstNameAscLastNameAsc().stream()
                 .map(UserMapper::toDto)
                 .collect(Collectors.toList());
     }
@@ -100,6 +103,17 @@ public class UserService {
             throw new BadRequestException(String.format("User with email: %s already exists.", email),
                     ExceptionType.ALREADY_EXISTS);
         }
+    }
+
+    public boolean isLoggedInUserActive() {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        UserDetailsImpl userDetails = (UserDetailsImpl) auth.getPrincipal();
+        UUID loggedInUserId = userDetails.getId();
+
+        User user = userRepo.findById(loggedInUserId)
+                .orElseThrow(() -> new NotFoundException(String.format("User with id: %s not found.", loggedInUserId),
+                        ExceptionType.NOT_FOUND));
+        return user.isActive();
     }
 
 }

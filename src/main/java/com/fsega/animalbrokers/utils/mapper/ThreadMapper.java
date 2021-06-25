@@ -4,11 +4,13 @@ import com.fsega.animalbrokers.model.dto.PostDto;
 import com.fsega.animalbrokers.model.dto.ThreadCreateDto;
 import com.fsega.animalbrokers.model.dto.ThreadDto;
 import com.fsega.animalbrokers.model.entity.AnimalBreed;
+import com.fsega.animalbrokers.model.entity.Post;
 import com.fsega.animalbrokers.model.entity.Thread;
 import com.fsega.animalbrokers.model.entity.User;
 import lombok.experimental.UtilityClass;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -43,16 +45,40 @@ public class ThreadMapper {
                 .title(thread.getTitle())
                 .description(thread.getDescription())
                 .type(thread.getType())
+                .animalClassId(thread.getAnimalBreed().getAnimalClass().getId())
                 .animalClassName(thread.getAnimalBreed().getAnimalClass().getName())
+                .animalBreedId(thread.getAnimalBreed().getId())
                 .animalBreedName(thread.getAnimalBreed().getName())
                 .photos(toDtos(thread.getPhotos()))
                 .lastKnownLocation(LocationMapper.toDto(thread.getLastKnownLocation()))
                 .lastSeenTime(thread.getLastSeenTime())
                 .creator(UserMapper.toDto(thread.getCreator()))
                 .posts(thread.getPosts().stream()
+                        .sorted(Comparator.comparing(Post::getCreated))
                         .map(PostMapper::toDto)
                         .collect(Collectors.toList()))
                 .build();
+    }
+
+    public static ThreadDto toMiniDto(Thread thread) {
+        if (thread == null) {
+            return null;
+        }
+        return ThreadDto.builder()
+                .id(thread.getId())
+                .title(thread.getTitle())
+                .description(thread.getDescription())
+                .type(thread.getType())
+                .animalClassId(thread.getAnimalBreed().getAnimalClass().getId())
+                .animalClassName(thread.getAnimalBreed().getAnimalClass().getName())
+                .animalBreedId(thread.getAnimalBreed().getId())
+                .animalBreedName(thread.getAnimalBreed().getName())
+                .lastKnownLocation(LocationMapper.toDto(thread.getLastKnownLocation()))
+                .lastSeenTime(thread.getLastSeenTime())
+                .creator(UserMapper.toDto(thread.getCreator()))
+                .photos(toDtos(thread.getPhotos()))
+                .build();
+
     }
 
 }

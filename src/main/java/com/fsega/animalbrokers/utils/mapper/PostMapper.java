@@ -7,6 +7,10 @@ import com.fsega.animalbrokers.model.entity.Thread;
 import com.fsega.animalbrokers.model.entity.User;
 import lombok.experimental.UtilityClass;
 
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+
 import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toDtos;
 import static com.fsega.animalbrokers.utils.mapper.PhotoMapper.toEntities;
 
@@ -30,8 +34,12 @@ public class PostMapper {
         if (post == null) {
             return null;
         }
+        ZoneId zoneId = ZoneId.of("Europe/Bucharest");
+        ZoneOffset currentOffsetForMyZone = zoneId.getRules().getOffset(post.getCreated());
         return PostDto.builder()
+                .id(post.getId())
                 .text(post.getText())
+                .created(LocalDateTime.ofInstant(post.getCreated(), currentOffsetForMyZone))
                 .photos(toDtos(post.getPhotos()))
                 .spottedAt(LocationMapper.toDto(post.getSpottedAt()))
                 .poster(UserMapper.toDto(post.getPoster()))

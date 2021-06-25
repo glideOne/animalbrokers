@@ -38,13 +38,15 @@ public class UserController {
 
     @PutMapping("/activate/{userId}")
     @Secured("ROLE_ADMIN")
-    public Boolean activateUser(@PathVariable UUID userId) {
+    public Boolean activateUser(@RequestHeader(name = "Authorization") String token,
+                                @PathVariable UUID userId) {
         return userService.activateUser(userId);
     }
 
     @PutMapping("/deactivate/{userId}")
     @Secured("ROLE_ADMIN")
-    public Boolean deactivateUser(@PathVariable UUID userId) {
+    public Boolean deactivateUser(@RequestHeader(name = "Authorization") String token,
+                                  @PathVariable UUID userId) {
         return userService.deactivateUser(userId);
     }
 }

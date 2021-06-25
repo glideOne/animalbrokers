@@ -30,12 +30,12 @@ public class Thread extends AbstractEntity {
     @JoinColumn(name = "breed_id", nullable = false)
     private AnimalBreed animalBreed;
 
-    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Photo> photos;
 
     private LocalDateTime lastSeenTime;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "location_id")
     private Location lastKnownLocation;
 
@@ -43,7 +43,7 @@ public class Thread extends AbstractEntity {
     @JoinColumn(name = "creator_id", nullable = false)
     private User creator;
 
-    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "thread", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Post> posts;
 
     public List<Post> getPosts() {
