@@ -6,7 +6,8 @@ server:
 spring:
   datasource:
     platform: postgres
-    url: jdbc:postgresql://localhost:5432/animalbrokers
+#    url: jdbc:postgresql://localhost:5432/animalbrokers
+    url: jdbc:postgresql://animalbrokers.clmme2uy8o08.eu-central-1.rds.amazonaws.com:5432/animalbrokers
     username: postgres
     password: postgres
   jpa:
